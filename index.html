@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title id="tabTitle">Hero Information</title>
+		<style type="text/css">
+			body
+			{
+				background-color: #000000;
+				font-family: sans-serif;
+			}
+			img.card
+			{
+				background-color: #8fdaff;
+				outline-style: solid;
+				outline-width: 2px;
+				outline-color: black;
+				margin-left: 1em;
+			}
+			div.header
+			{
+				background-color: #4700c2;
+				height: 4em;
+			}
+			div.options
+			{
+				margin-top: 1em;
+				margin-bottom: 1em;
+				background-color: #211f40;
+				height: 8em;
+				color: #FFFFFF;
+			}
+			center.ttle
+			{
+				margin:auto;
+				color: #FFFFFF;
+				font-size: 3em;
+			}
+			div.cardholder
+			{
+				background-color: #424242;
+				margin: auto;
+				padding: 1em 1em 1em 1em;
+				overflow:auto;
+				width: 90%;
+			}
+			div.heroCard
+			{
+				float:left;
+				background-color: #878787;
+				margin-bottom: 1em;
+				margin-right: 1em;
+				padding-left: 1em;
+				width: 16em;
+			}
+		</style>
+		<script type="text/javascript">
+			var rskill = 0;
+			var rdamage = 0;
+			var rflank = 0;
+			var rsupport = 0;
+			
+			function generateOptBars(size,amount,trig)
+			{
+				var fin = "";
+				size++;
+				for(var i = 0; i < size; i++)
+				{
+					var val = "off";
+					if(i == 0)
+					{
+						val = "red";
+					}
+					else if(i <= amount)
+					{
+						val = "on";
+					}
+					fin += "<button type=\"button\" onclick=\"triggerOptBar(" + trig + "," + i + ");\"><img src=\"images/bar_" + val + ".png\"></img></button>";
+				}
+				return fin;
+			}
+			function generateBars(size,amount)
+			{
+				var fin = "";
+				for(var i = 0; i < size; i++)
+				{
+					var val = "off";
+					if(i < amount)
+					{
+						val = "on";
+					}
+					fin += "<img src=\"images/bar_" + val + ".png\"></img>";
+				}
+				return fin;
+			}
+			function generateCard(name,skill,damage,flank,support)
+			{
+				if(skill < rskill || damage < rdamage || flank < rflank || support < rsupport)
+				{
+					return "";
+				}
+				var fin = "<div class=\"heroCard\"><h2>" + name + "</h2><img class=\"card\" src=\"./images/cards/" + name + ".png\"></img>"; //image
+				fin += "<div style=\"height:49%;overflow:auto;\"><span style=\"float:left;width:8em;\"><p>Skill </p>" + generateBars(4,skill); //skill
+				fin += "</span><p>Damage </p>" + generateBars(4,damage) + "</div>"; //damage
+				fin += "<div style=\"height:49%;overflow:auto;\"><span style=\"float:left;width:8em;\"><p>Flank </p>" + generateBars(4,flank); //flank
+				fin += "</span><p>Support </p>" + generateBars(4,support) + "</div></div>"; //support
+				return fin;
+			}
+			function getHero(number)
+			{
+				switch(number)
+				{
+					case 0: //genji
+						return generateCard("genji",4,3,3,0);
+					case 1: //mccree
+						return generateCard("mccree",3,3,2,0);
+					case 2: //pharah
+						return generateCard("pharah",3,4,3,1);
+					case 3: //reaper
+						return generateCard("reaper",2,4,2,0);
+					case 4: //soldier76
+						return generateCard("soldier76",1,3,2,2);
+					case 5: //tracer
+						return generateCard("tracer",3,3,4,0);
+					case 6: //bastion
+						return generateCard("bastion",2,4,0,0);
+					case 7: //hanzo
+						return generateCard("hanzo",4,3,2,1);
+					case 8: //junkrat
+						return generateCard("junkrat",3,3,2,0);
+					case 9: //mei
+						return generateCard("mei",3,2,2,1);
+					case 10: //torbjorn
+						return generateCard("torbjorn",0,3,0,1);
+					case 11: //widowmaker
+						return generateCard("widowmaker",4,3,2,1);
+					case 12: //dva
+						return generateCard("dva",3,2,2,1);
+					case 13: //reinhardt
+						return generateCard("reinhardt",2,3,1,2);
+					case 14: //roadhog
+						return generateCard("roadhog",3,4,2,1);
+					case 15: //winston
+						return generateCard("winston",2,2,3,2);
+					case 16: //zarya
+						return generateCard("zarya",3,3,1,2);
+					case 17: //ana
+						return generateCard("ana",3,2,2,4);
+					case 18: //lucio
+						return generateCard("lucio",3,1,2,3);
+					case 19: //mercy
+						return generateCard("mercy",2,1,1,4);
+					case 20: //symmetra
+						return generateCard("symmetra",2,2,0,1);
+					case 21: //zenyatta
+						return generateCard("zenyatta",3,3,1,3);
+				}
+				return "";
+			}
+			function update()
+			{
+				var cardhold = document.getElementById("ch");
+				cardhold.innerHTML = "<center>";
+				for(var i = 0; i < 22; i++ )
+				{
+					cardhold.innerHTML += getHero(i);
+				}
+				cardhold.innerHTML += "</center>";
+				
+				var opts = document.getElementById("opt");
+				opts.innerHTML = "<p style=\"width:16em;float:left;\">Skill<br>" + generateOptBars(4,rskill,0);
+				opts.innerHTML += "</p><p style=\"width:16em;float:left;\">Damage<br>" + generateOptBars(4,rdamage,1);
+				opts.innerHTML += "</p><p style=\"width:16em;float:left;\">Flank<br>" + generateOptBars(4,rflank,2);
+				opts.innerHTML += "</p><p style=\"width:16em;float:left;\">Support<br>" + generateOptBars(4,rsupport,3);
+				opts.innerHTML += "</p>";
+				
+			}
+			function triggerOptBar(num,val)
+			{
+				switch(num)
+				{
+					case 0:
+						rskill = val;
+						break;
+					case 1:
+						rdamage = val;
+						break;
+					case 2:
+						rflank = val;
+						break;
+					case 3:
+						rsupport = val;
+						break;
+				}
+				update();
+			}
+		</script>
+	</head>
+	<body onload="update();">
+		<div class="header">
+			<center class="ttle"><p>Hero Information</p></center>
+		</div>
+		<div class="options" id="opt">
+			
+		</div>
+		<div class="cardholder" id="ch">
+		</div>
+	</body>
+</html>
+
