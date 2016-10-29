@@ -20,13 +20,17 @@
 			{
 				background-color: #4700c2;
 				height: 4em;
+				margin-top: -2.5em;
 			}
 			div.options
 			{
-				margin-top: 1em;
+				margin:auto;
+				margin-top: -0.6em;
 				margin-bottom: 1em;
+				padding-left: 2em;
 				background-color: #211f40;
-				height: 8em;
+				height: 6em;
+				width: 40em;
 				color: #FFFFFF;
 			}
 			center.ttle
@@ -37,9 +41,11 @@
 			}
 			div.cardholder
 			{
-				background-color: #424242;
+				background-color: #000000;
 				margin: auto;
+				margin-top: -0.6em;
 				padding: 1em 1em 1em 1em;
+				height:45em;
 				overflow:auto;
 				width: 90%;
 			}
@@ -51,6 +57,9 @@
 				margin-right: 1em;
 				padding-left: 1em;
 				width: 16em;
+				outline-style:solid;
+				outline-color:#AAAAAA;
+				outline-width:4px;
 			}
 		</style>
 		<script type="text/javascript">
@@ -58,6 +67,7 @@
 			var rdamage = 0;
 			var rflank = 0;
 			var rsupport = 0;
+			var currentHero = 0;
 			
 			function generateOptBars(size,amount,trig)
 			{
@@ -74,7 +84,7 @@
 					{
 						val = "on";
 					}
-					fin += "<button type=\"button\" onclick=\"triggerOptBar(" + trig + "," + i + ");\"><img src=\"images/bar_" + val + ".png\"></img></button>";
+					fin += "<input type=\"image\" onclick=\"triggerOptBar(" + trig + "," + i + ");\" src=\"images/bar_" + val + ".png\"></button>";
 				}
 				return fin;
 			}
@@ -159,20 +169,34 @@
 			function update()
 			{
 				var cardhold = document.getElementById("ch");
-				cardhold.innerHTML = "<center>";
-				for(var i = 0; i < 22; i++ )
-				{
-					cardhold.innerHTML += getHero(i);
-				}
-				cardhold.innerHTML += "</center>";
+				cardhold.innerHTML = "";
+				currentHero = 0;
+				updateHero();
 				
 				var opts = document.getElementById("opt");
-				opts.innerHTML = "<p style=\"width:16em;float:left;\">Skill<br>" + generateOptBars(4,rskill,0);
-				opts.innerHTML += "</p><p style=\"width:16em;float:left;\">Damage<br>" + generateOptBars(4,rdamage,1);
-				opts.innerHTML += "</p><p style=\"width:16em;float:left;\">Flank<br>" + generateOptBars(4,rflank,2);
-				opts.innerHTML += "</p><p style=\"width:16em;float:left;\">Support<br>" + generateOptBars(4,rsupport,3);
+				opts.innerHTML = "<p style=\"width:10em;float:left;\">Skill<br>" + generateOptBars(4,rskill,0);
+				opts.innerHTML += "</p><p style=\"width:10em;float:left;\">Damage<br>" + generateOptBars(4,rdamage,1);
+				opts.innerHTML += "</p><p style=\"width:10em;float:left;\">Flank<br>" + generateOptBars(4,rflank,2);
+				opts.innerHTML += "</p><p style=\"width:10em;float:left;\">Support<br>" + generateOptBars(4,rsupport,3);
 				opts.innerHTML += "</p>";
-				
+			}
+			function updateHero()
+			{
+				var val = getHero(currentHero);
+				if(currentHero < 22)
+				{
+					currentHero++;
+					if(val == "")
+					{
+						updateHero();
+					}
+					else
+					{
+						var cardhold = document.getElementById("ch");
+						setTimeout("updateHero();",32);
+						cardhold.innerHTML += val;
+					}
+				}
 			}
 			function triggerOptBar(num,val)
 			{
